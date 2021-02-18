@@ -1,5 +1,7 @@
 # Studentchain
 
+Cryptocurrency marketplace for student problems/exercises.
+
 ## Project setup
 ```
 npm install
