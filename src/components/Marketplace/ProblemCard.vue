@@ -5,22 +5,23 @@
   </div>
   
   <div class="card-body text-center mb-3">
-    <h5 class="card-title">Turn FA to right-linear grammar</h5>
-    <p class="card-text mb-2">All details are in the attached files...</p>
-    <i class="card-text">Has attached files.</i>
+    <h5 class="card-title">{{problem.title}}</h5>
+    <p class="card-text mb-2">{{problem.description}}</p>
+    <i v-if="problem.attached_files.length>0" class="card-text">Has attached files.</i>
   </div>
 
   <div class="card-footer">
     <div class="row">
         <div class="col-6 text-left">
-            <p class="mb-1 p-0">Due: <b>3 days</b></p>
-            <p class="mb-1 p-0">Price: <b> ($3) 0.0017 ETH</b></p>
+            <p class="mb-1 p-0">Due: <b>{{problem.due_days}} days</b></p>
+            <p class="mb-1 p-0">Price: <b> ($3) {{problem.price_eth}} ETH</b></p>
         </div>
         <div class="col-6 text-right align-middle">
-            <ProblemPopup/>
-            <SolveProblemModal/>
-            <button class="btn btn-secondary mr-2" data-toggle="modal" data-target="#ProblemPopupModal">Details</button>
-            <button class="btn btn-success" data-toggle="modal" data-target="#SolveProblemModal">Solve</button>
+            <ProblemPopup      :problem="problem"/>
+            <SolveProblemModal :problem="problem"/>
+            
+            <button class="btn btn-secondary mr-2" data-toggle="modal" :data-target="'#problem' + problem.id" >Details</button>
+            <button class="btn btn-success" data-toggle="modal" :data-target="'#solve' + problem.id">Solve</button>
         </div>
     </div>
   </div>
@@ -32,9 +33,13 @@ import ProblemPopup from '../Marketplace/ProblemPopup.vue'
 import SolveProblemModal from '../Marketplace/SolveProblemPopup.vue'
 export default {
     name: "Problem Card",
+    props: ['problem'],
     components: {
         ProblemPopup,
         SolveProblemModal
+    },
+    methods: {
+      
     }
 }
 </script>

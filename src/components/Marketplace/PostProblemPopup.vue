@@ -11,27 +11,42 @@
             </div>
 
             <div class="modal-body text-center mt-3">
-                <form>
+                <form onsubmit="return false;">
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input class="form-control" id="title" placeholder="Give problem a clear title."/>
+                        <input v-model="insertedTitle"
+                               class="form-control" id="title" placeholder="Give problem a clear title."/>
                     </div>
                      <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea rows="5" class="form-control" id="description" placeholder="Describe the problem."/>
+                        <textarea v-model="insertedDescription"
+                                  rows="5" class="form-control" id="description" placeholder="Describe the problem."/>
                     </div>
+
                     <div class="form-group">
+                        <label for="category">Problem category</label>
+                        <select v-model="insertedCategoryId" class="form-control" id="category">
+                        <option v-for="category in allCategories" :key="category.id" :value="category.id">
+                            {{category.name}}
+                        </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mt-4">
                         <button class="btn btn-success mr-2">Attach files</button>
                         <small style="color: #B7B5B5;">(max. 5 MB)</small>
                     </div>
+
                     <div class="row mt-4">
                         <div class="col-6">
                             <label for="dueDays">Due</label>
-                            <input class="form-control" id="dueDays" placeholder="2 days"/>
+                            <input v-model="insertedDueDays"
+                                   class="form-control" id="dueDays" placeholder="2 days"/>
                         </div>
                         <div class="col-6">
                             <label for="price">Price</label>
-                            <input class="form-control" id="price" placeholder="0.0017 ETH ($3)"/>
+                            <input v-model="insertedPrice"
+                                   class="form-control" id="price" placeholder="0.0017 ETH ($3)"/>
                         </div>
                     </div>
                 </form>
@@ -40,10 +55,10 @@
             <div class="modal-footer">
                 <div class="row w-100">
                     <div class="col-6 text-left">
-                        <button class="btn btn-lg btn-secondary">Cancel</button>
+                        <button data-dismiss="modal" class="btn btn-lg btn-secondary">Cancel</button>
                     </div>
                     <div class="col-6 text-right">
-                        <button class="btn btn-lg btn-success">Post</button>
+                        <button @click="postProblem" class="btn btn-lg btn-success">Post</button>
                     </div>
                 </div>
             </div>
@@ -53,8 +68,59 @@
 </template>
 
 <script>
-export default {
+import problemService from '@/services/problemService.js'
+import categoryService from '@/services/categoryService.js'
 
+export default {
+    data(){
+        return {
+            allCategories: [],
+
+            insertedTitle: '',
+            insertedDescription: '',
+            insertedAttachedFiles: ['example1.pdf', 'example2.pdf'],
+            insertedCategoryId: '',
+            insertedDueDays: '',
+            insertedPrice: '',
+        }
+    },
+
+    methods: {
+        makeid(l)
+        {
+            var text = "";
+            var char_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            for(var i=0; i < l; i++ )  
+                text += char_list.charAt(Math.floor(Math.random() * char_list.length));    
+            return text;
+        },
+
+        async postProblem(){
+            let problem = {
+                id: this.makeid(16),
+                created_at: new Date().toISOString(),
+                title: this.insertedTitle,
+                description: this.insertedDescription,
+                attached_files: this.insertedAttachedFiles,
+                due_days: this.insertedDueDays,
+                price: this.insertedPrice,
+                category_id: this.insertedCategoryId,
+                buyer_id: "randomBuyerIdChangeLater",  //@TODO: Change later when login is done
+                solver_id: null,
+                status: "unsolved"
+            }
+            console.log(problem.category_id)
+            
+            const data = {data: problem}
+            const response = await problemService.postProblem(data)
+            console.log(response)
+        }
+    },
+
+    async mounted(){
+        const response = await categoryService.getAllCategories()
+        this.allCategories = response.data
+    }
 }
 </script>
 
