@@ -14,26 +14,32 @@
     </ul>
 
     <ul id="centerItems" class="navbar-nav mx-auto">
-        <li class="nav-item active">
-            <a class="nav-link" href="#"> MARKETPLACE</a>
+        <li @click="changeTab('marketplace')"
+            :class="[activeTab == 'marketplace' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/" class="nav-link"> MARKETPLACE</router-link>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#"> PROBLEM STATUS</a>
+        <li @click="changeTab('problem_status')"
+            :class="[activeTab == 'problem_status' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/problem_status" class="nav-link"> PROBLEM STATUS</router-link>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#"> FAQ</a>
+        <li @click="changeTab('faq')"
+            :class="[activeTab == 'faq' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/faq" class="nav-link"> FAQ</router-link>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#"> CONTACT</a>
+        <li @click="changeTab('contact')"
+            :class="[activeTab == 'contact' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/contact" class="nav-link"> CONTACT</router-link>
         </li>
     </ul>
 
     <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="#"> Login</a>
+        <li @click="changeTab('login')"
+            :class="[activeTab == 'login' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/login" class="nav-link"> Login</router-link>
         </li>
-         <li class="nav-item">
-            <a class="nav-link" href="#"> Register</a>
+         <li @click="changeTab('register')" 
+            :class="[activeTab == 'register' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/register" class="nav-link"> Register</router-link>
         </li>
     </ul>
   </div>
@@ -42,7 +48,17 @@
 
 <script>
 export default {
-    
+    data(){
+      return {
+        activeTab : "marketplace",
+      }
+    },
+
+    methods:{
+      changeTab(clickedTab){
+        this.activeTab = clickedTab;
+      }
+    }
 }
 </script>
 
