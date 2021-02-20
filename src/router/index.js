@@ -7,7 +7,9 @@ import Contact from '../views/Contact.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Profile from '../views/Profile.vue'
-import DeliverSolution from '../components/ProblemStatus/DeliverSolution.vue'
+import DeliverSolution from '../components/ProblemStatus/SolverMode/DeliverSolution.vue'
+import ReviewSolution from '../components/ProblemStatus/BuyerMode/ReviewSolution.vue'
+import TransactionApproved from '../components/ProblemStatus/BuyerMode/TransactionApproved.vue'
 
 const routes = [
     {
@@ -49,6 +51,16 @@ const routes = [
         path: '/deliver_solution',
         name: 'Deliver Solution',
         component: DeliverSolution
+    },
+    {
+        path: '/review_solution',
+        name: 'Review Solution',
+        component: ReviewSolution
+    },
+    {
+        path: '/transaction_approved',
+        name: 'Transaction Approved',
+        component: TransactionApproved
     }
 ]
 

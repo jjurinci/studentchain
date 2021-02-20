@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import ProblemPopup from "../Marketplace/ProblemPopup.vue"
+import ProblemPopup from "@/components/Marketplace/ProblemPopup.vue"
 export default {
     name: "Solver Mode Table",
     components: {

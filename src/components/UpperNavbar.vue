@@ -7,14 +7,25 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item logo">
-          <a class="nav-link" href="#">StudentChain</a>
+          <a class="nav-link" href="#">
+            <img src="../assets/logo.png" height="52" width="192"/>
+          </a>
       </li>
     </ul>
 
-    <ul class="navbar-nav mx-auto">
-      <li class="nav-item">
-          Post a problem, pay with crypto
-      </li>
+    <ul id="centerItems" class="navbar-nav mx-auto">
+        <li class="nav-item active">
+            <a class="nav-link" href="#"> MARKETPLACE</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#"> PROBLEM STATUS</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#"> FAQ</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#"> CONTACT</a>
+        </li>
     </ul>
 
     <ul class="navbar-nav ml-auto">
@@ -40,11 +51,20 @@ export default {
 .navbar{
     background-color: #32373B;
     font-size:17px;
-    font-family: "monospace", "Verdana";
+    font-family: "Monospace", "Verdana";
 }
 
 .navbar a, .navbar li{
     color: white;
+}
+
+#centerItems li{
+    font-size: 19px;
+    margin-right: 100px;
+}
+
+.active{
+    border-bottom: 1px solid white;
 }
 
 .logo{

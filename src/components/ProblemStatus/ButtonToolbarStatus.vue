@@ -10,11 +10,13 @@
     <div class="col-4">
         <div class="row">
             <div class="col-6 text-center">
-                <button class="btn btn-lg btn-secondary mr-2" style="white-space:nowrap;">Solver mode</button>    
+                <button @click="changeView('solver')"
+                        class="btn btn-lg btn-secondary mr-2" style="white-space:nowrap;">Solver mode</button>    
                 <small style="color: gray;">Problems that you are solving.</small>
             </div>
             <div class="col-6 text-center">
-                <button class="btn btn-lg btn-secondary" style="white-space:nowrap;">Buyer mode</button>
+                <button @click="changeView('buyer')"
+                        class="btn btn-lg btn-secondary" style="white-space:nowrap;">Buyer mode</button>
                 <small style="color: gray;">Problems that others are solving for you.</small>
             </div>
         </div>
@@ -24,7 +26,11 @@
 
 <script>
 export default {
-    
+    methods: {
+        changeView(mode){
+            this.$emit('ChangeView', mode)
+        }
+    }
 }
 </script>
 
