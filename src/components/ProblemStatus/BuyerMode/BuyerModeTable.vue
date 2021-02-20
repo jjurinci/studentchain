@@ -42,7 +42,7 @@
       <td>Delivered</td>
       <td>($5) 0.0028 ETH</td>
       <td></td>
-      <td><button class="btn btn-lg btn-success">Review</button></td>
+      <td><router-link to="/review_solution" class="btn btn-lg btn-success">Review</router-link></td>
     </tr>
   </tbody>
 </table>

@@ -21,8 +21,8 @@
             <RejectSolutionPopup/>
             <button data-toggle="modal" data-target="#RejectSolutionModal"
                     class="btn btn-lg btn-secondary mr-5">REJECT</button>
-            <button data-toggle="modal" data-target="#ApproveSolutionModal"
-                    class="btn btn-lg btn-success">APPROVE</button>
+            <router-link to="/transaction_approved"
+                         class="btn btn-lg btn-success">APPROVE</router-link>
         </div>
     </form>
 </div>

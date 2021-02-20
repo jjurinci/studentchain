@@ -1,6 +1,7 @@
 <template>
 <table class="table text-center mt-5">
   <ProblemPopup/>
+  <SeeDeliveredSolutionPopup/>
   <thead class="thead-dark">
     <tr>
       <th scope="col">Problem</th>
@@ -42,7 +43,11 @@
       <td>Sent for review</td>
       <td>($5) 0.0028 ETH</td>
       <td></td>
-      <td><button class="btn btn-lg btn-success">See delivered</button></td>
+      <td>
+        <button data-toggle="modal" data-target="#SeeDeliveredSolutionModal" class="btn btn-lg btn-success">
+          See delivered
+        </button>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -50,10 +55,13 @@
 
 <script>
 import ProblemPopup from "@/components/Marketplace/ProblemPopup.vue"
+import SeeDeliveredSolutionPopup from "@/components/ProblemStatus/SolverMode/SeeDeliveredSolutionPopup.vue"
+
 export default {
     name: "Solver Mode Table",
     components: {
-        ProblemPopup
+        ProblemPopup,
+        SeeDeliveredSolutionPopup
     }
 }
 </script>

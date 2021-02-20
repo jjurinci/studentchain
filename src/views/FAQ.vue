@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1 class="text-center">FAQ</h1>
+        <h1 class="text-center mt-4">FAQ</h1>
     </div>
 </template>
 
