@@ -1,0 +1,89 @@
+<template>
+<nav class="navbar navbar-expand-lg">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item logo">
+          <a class="nav-link" href="#">
+            <img src="../assets/logo.png" height="52" width="192"/>
+          </a>
+      </li>
+    </ul>
+
+    <ul id="centerItems" class="navbar-nav mx-auto">
+        <li @click="changeTab('marketplace')"
+            :class="[activeTab == 'marketplace' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/" class="nav-link"> MARKETPLACE</router-link>
+        </li>
+        <li @click="changeTab('problem_status')"
+            :class="[activeTab == 'problem_status' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/problem_status" class="nav-link"> PROBLEM STATUS</router-link>
+        </li>
+        <li @click="changeTab('faq')"
+            :class="[activeTab == 'faq' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/faq" class="nav-link"> FAQ</router-link>
+        </li>
+        <li @click="changeTab('contact')"
+            :class="[activeTab == 'contact' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/contact" class="nav-link"> CONTACT</router-link>
+        </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+        <li @click="changeTab('login')"
+            :class="[activeTab == 'login' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/login" class="nav-link"> Login</router-link>
+        </li>
+         <li @click="changeTab('register')" 
+            :class="[activeTab == 'register' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/register" class="nav-link"> Register</router-link>
+        </li>
+    </ul>
+  </div>
+</nav>
+</template>
+
+<script>
+export default {
+    data(){
+      return {
+        activeTab : "marketplace",
+      }
+    },
+
+    methods:{
+      changeTab(clickedTab){
+        this.activeTab = clickedTab;
+      }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+//Upper navbar color: #32373B
+.navbar{
+    background-color: #32373B;
+    font-size:17px;
+    font-family: "Monospace", "Verdana";
+}
+
+.navbar a, .navbar li{
+    color: white;
+}
+
+#centerItems li{
+    font-size: 19px;
+    margin-right: 100px;
+}
+
+.active{
+    border-bottom: 1px solid white;
+}
+
+.logo{
+    font-size:24px;
+}
+</style>

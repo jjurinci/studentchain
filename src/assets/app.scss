@@ -1,1 +1,12 @@
 @import '~bootstrap/scss/bootstrap';
+@import "../assets/fontawesome-free-5.15.2-web/scss/fontawesome.scss";
+@import "../assets/fontawesome-free-5.15.2-web/scss/solid.scss";
+@import "../assets/fontawesome-free-5.15.2-web/scss/regular.scss";
+
+.btn-success{
+    background-color: #43896D;
+}
+
+.btn-secondary{
+    background-color: #404447;
+}
