@@ -20,7 +20,7 @@
       <td>Being solved</td>
       <td>($3) 0.0017 ETH</td>
       <td>2 days</td>
-      <td><button class="btn btn-lg btn-success">Deliver</button></td>
+      <td><router-link to="/deliver_solution" class="btn btn-lg btn-success">Deliver</router-link></td>
     </tr>
     <tr>
       <td>
@@ -31,7 +31,7 @@
       <td>Being solved</td>
       <td>($5) 0.0028 ETH</td>
       <td>3 days</td>
-      <td><button class="btn btn-lg btn-success">Deliver</button></td>
+      <td><router-link to="/deliver_solution" class="btn btn-lg btn-success">Deliver</router-link></td>
     </tr>
     <tr>
       <td>

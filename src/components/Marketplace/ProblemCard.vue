@@ -1,7 +1,7 @@
 <template>
 <div class="card">
   <div class="card-header">
-    By: user514 | Rating: 4.6/5 with 7 problems
+    <router-link to="/profile" style="color: inherit;">By: user514 | Rating: 4.6/5 with 7 problems</router-link>
   </div>
   
   <div class="card-body text-center mb-3">
