@@ -22,5 +22,10 @@ export default {
     async getSolutionsByProblemId(problem_id){
         const response = await axios.get(url + "/solutions/problem/" + problem_id)
         return response.data
+    },
+
+    async getSolutionsByMultipleProblemIds(problem_ids){
+        const response = await axios.post(url + "/solutions/multiple_problems", problem_ids)
+        return response.data
     }
 }

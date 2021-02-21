@@ -48,12 +48,12 @@ const routes = [
         component: Profile
     },
     {
-        path: '/deliver_solution',
+        path: '/deliver_solution/:problem_id',
         name: 'Deliver Solution',
         component: DeliverSolution
     },
     {
-        path: '/review_solution',
+        path: '/review_solution/:problem_id',
         name: 'Review Solution',
         component: ReviewSolution
     },

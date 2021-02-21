@@ -9,6 +9,11 @@ export default {
         return response.data.data
     },
 
+    async getProblemById(problem_id){
+        const response = await axios.get(url + "/problems/" + problem_id)
+        return response.data
+    },
+
     async postProblem(data){
         const response = await axios.post(url + "/problems", data)
         return response.data
