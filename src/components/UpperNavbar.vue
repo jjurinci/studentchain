@@ -40,7 +40,9 @@
 
         <li v-if="currentUser" @click="changeTab('login')"
             :class="[$route.path == '/profile' ? 'nav-item active' : 'nav-item']">
-            <router-link to="/profile" class="nav-link"> {{currentUser.username}}</router-link>
+            <router-link :to="{name: 'Profile', params: {user_id: currentUser.id}}" class="nav-link">
+              {{currentUser.username}}
+            </router-link>
         </li>
          <li v-if="currentUser" class="nav-item">
             <a @click="logout" href="" class="nav-link"> logout</a>

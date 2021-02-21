@@ -43,7 +43,7 @@ const routes = [
         component: Register
     },
     {
-        path: '/profile',
+        path: '/profile/:user_id',
         name: 'Profile',
         component: Profile
     },
@@ -74,7 +74,7 @@ router.beforeEach(async (to, from, next) => {
 
     if(!user && to.name != 'Marketplace' && to.name != 'FAQ'
              && to.name != 'Contact'     && to.name != 'Login'
-             && to.name != 'Register'    && to.name != 'Profile'){
+             && to.name != 'Register'){
         next('/login')
     }
     else next()

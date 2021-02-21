@@ -1,7 +1,9 @@
 <template>
 <div class="card">
   <div class="card-header">
-    <router-link to="/profile" style="color: inherit;">By: user514 | Rating: 4.6/5 with 7 problems</router-link>
+    <router-link :to="{ name:'Profile', params: {user_id: problem.buyer.id} }" style="color: inherit;">
+      By: {{problem.buyer.username}} | Rating: 4.6/5 with {{problem.buyer.total_number_problems}} problems
+    </router-link>
   </div>
   
   <div class="card-body text-center mb-3">
