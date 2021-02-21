@@ -69,4 +69,15 @@ const router = createRouter({
     routes,
 });
 
+router.beforeEach(async (to, from, next) => {
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    if(!user && to.name != 'Marketplace' && to.name != 'FAQ'
+             && to.name != 'Contact'     && to.name != 'Login'
+             && to.name != 'Register'    && to.name != 'Profile'){
+        next('/login')
+    }
+    else next()
+})
+
 export default router

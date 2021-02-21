@@ -86,6 +86,7 @@ export default {
     },
 
     methods: {
+        //This function is going to get deleted when real database replaces the mock database
         makeid(l)
         {
             var text = "";

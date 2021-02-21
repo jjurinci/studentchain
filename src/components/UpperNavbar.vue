@@ -33,13 +33,22 @@
     </ul>
 
     <ul class="navbar-nav ml-auto">
-        <li @click="changeTab('login')"
+        <li v-if="!currentUser" @click="changeTab('login')"
             :class="[activeTab == 'login' ? 'nav-item active' : 'nav-item']">
             <router-link to="/login" class="nav-link"> Login</router-link>
         </li>
-         <li @click="changeTab('register')" 
+         <li v-if="!currentUser" @click="changeTab('register')" 
             :class="[activeTab == 'register' ? 'nav-item active' : 'nav-item']">
             <router-link to="/register" class="nav-link"> Register</router-link>
+        </li>
+
+        <li v-if="currentUser" @click="changeTab('login')"
+            :class="[activeTab == 'login' ? 'nav-item active' : 'nav-item']">
+            <router-link to="/profile" class="nav-link"> {{currentUser.username}}</router-link>
+        </li>
+         <li v-if="currentUser" @click="changeTab('register')" 
+            :class="[activeTab == 'register' ? 'nav-item active' : 'nav-item']">
+            <a @click="logout" href=""  class="nav-link"> logout</a>
         </li>
     </ul>
   </div>
@@ -51,14 +60,24 @@ export default {
     data(){
       return {
         activeTab : "marketplace",
+        currentUser: null
       }
     },
 
     methods:{
       changeTab(clickedTab){
         this.activeTab = clickedTab;
+      },
+
+      logout(){
+        localStorage.removeItem('user')
+        this.$router.push({name: 'Login'})
       }
-    }
+    },
+
+    mounted(){
+      this.currentUser = JSON.parse(localStorage.getItem('user'))
+    },
 }
 </script>
 

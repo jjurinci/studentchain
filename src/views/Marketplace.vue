@@ -34,7 +34,6 @@ export default {
 
     async mounted(){
         this.problems = await problemService.getAllProblems()
-        console.log(this.problems)
     }
 }
 </script>

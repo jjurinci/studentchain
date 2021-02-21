@@ -1,4 +1,4 @@
-import axiso from 'axios'
+import axios from 'axios'
 import config from './config'
 
 const url = config.dmlUrl
