@@ -1,10 +1,12 @@
 <template>
     <div class="container-fluid p-0">
-        <CategoriesNavbar/>
+        <CategoriesNavbar v-if="allProblems.length > 0"
+                          :allProblems="allProblems"
+                          @changeCategoryEvent="changeCategoryHandler"/>
         <ButtonToolbar/>        
 
         <div class="row ml-5 mr-5 mt-5">
-            <div v-for="problem in problems" :key="problem.id" class="col-4 mb-5">
+            <div v-for="problem in filteredByCategoryProblems" :key="problem.id" class="col-4 mb-5">
                 <ProblemCard :problem="problem"/>
             </div>
         </div>
@@ -28,12 +30,24 @@ export default {
 
     data(){
         return{
-            problems: []
+            allProblems: [],
+            filteredByCategoryProblems: []
+        }
+    },
+
+    methods: {
+        // @TODO: See more needs to be updated later. For now it returns all problems.
+        changeCategoryHandler(category_id){
+            if(category_id == 'all' || category_id == 'see_more') 
+                this.filteredByCategoryProblems = this.allProblems
+            else
+                this.filteredByCategoryProblems = this.allProblems.filter(problem => problem.category_id == category_id)
         }
     },
 
     async mounted(){
-        this.problems = await problemService.getAllProblems()
+        this.allProblems = await problemService.getAllProblems()
+        this.filteredByCategoryProblems = this.allProblems
     }
 }
 </script>
