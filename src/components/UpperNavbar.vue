@@ -14,32 +14,38 @@
     </ul>
 
     <ul id="centerItems" class="navbar-nav mx-auto">
-        <li @click="changeTab('marketplace')"
-            :class="[activeTab == 'marketplace' ? 'nav-item active' : 'nav-item']">
+        <li :class="[$route.path == '/' ? 'nav-item active' : 'nav-item']">
             <router-link to="/" class="nav-link"> MARKETPLACE</router-link>
         </li>
-        <li @click="changeTab('problem_status')"
-            :class="[activeTab == 'problem_status' ? 'nav-item active' : 'nav-item']">
+        <li :class="[$route.path == '/problem_status' ? 'nav-item active' : 'nav-item']">
             <router-link to="/problem_status" class="nav-link"> PROBLEM STATUS</router-link>
         </li>
-        <li @click="changeTab('faq')"
-            :class="[activeTab == 'faq' ? 'nav-item active' : 'nav-item']">
+        <li :class="[$route.path == '/faq' ? 'nav-item active' : 'nav-item']">
             <router-link to="/faq" class="nav-link"> FAQ</router-link>
         </li>
-        <li @click="changeTab('contact')"
-            :class="[activeTab == 'contact' ? 'nav-item active' : 'nav-item']">
+        <li :class="[$route.path == '/contact' ? 'nav-item active' : 'nav-item']">
             <router-link to="/contact" class="nav-link"> CONTACT</router-link>
         </li>
     </ul>
 
     <ul class="navbar-nav ml-auto">
-        <li @click="changeTab('login')"
-            :class="[activeTab == 'login' ? 'nav-item active' : 'nav-item']">
+        <li v-if="!currentUser"
+            :class="[$route.path == '/login' ? 'nav-item active' : 'nav-item']">
             <router-link to="/login" class="nav-link"> Login</router-link>
         </li>
-         <li @click="changeTab('register')" 
-            :class="[activeTab == 'register' ? 'nav-item active' : 'nav-item']">
+         <li v-if="!currentUser" 
+            :class="[$route.path == '/register' ? 'nav-item active' : 'nav-item']">
             <router-link to="/register" class="nav-link"> Register</router-link>
+        </li>
+
+        <li v-if="currentUser"
+            :class="[$route.path == ('/profile/' + currentUser.id) ? 'nav-item active' : 'nav-item']">
+            <router-link :to="{name: 'Profile', params: {user_id: currentUser.id}}" class="nav-link">
+              {{currentUser.username}}
+            </router-link>
+        </li>
+         <li v-if="currentUser" class="nav-item">
+            <a @click="logout" href="" class="nav-link"> logout</a>
         </li>
     </ul>
   </div>
@@ -51,14 +57,20 @@ export default {
     data(){
       return {
         activeTab : "marketplace",
+        currentUser: null
       }
     },
 
     methods:{
-      changeTab(clickedTab){
-        this.activeTab = clickedTab;
+      logout(){
+        localStorage.removeItem('user')
+        this.$router.push({name: 'Login'})
       }
-    }
+    },
+
+    mounted(){
+      this.currentUser = JSON.parse(localStorage.getItem('user'))
+    },
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
-<div class="container text-center mt-5">
-    <h4>Deliver: <b>Turn FA to right-linear grammar</b></h4>
-    <h5 class="mt-3"><i>By: user514 | 4.6/5 with 7 problems</i></h5>
+<div v-if="loaded" class="container text-center mt-5">
+    <h4>Deliver: <b>{{problem.title}}</b></h4>
+    <h5 class="mt-3"><i>By: {{problem.buyer.username}} | 4.6/5 with 7 problems</i></h5>
 
     <form class="w-50 mx-auto mt-4">
         <div class="form-group">
@@ -22,8 +22,22 @@
 </template>
 
 <script>
+import problemService from '@/services/problemService.js'
+//import solutionService from '@/services/solutionService.js'
+
 export default {
-    
+    data(){
+        return{
+            problem: null,
+            loaded: false
+        }
+    },
+
+    async mounted(){
+        const problem_id = this.$route.params.problem_id
+        this.problem    = await problemService.getProblemById(problem_id)
+        this.loaded = true
+    }
 }
 </script>
 

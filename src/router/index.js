@@ -43,17 +43,17 @@ const routes = [
         component: Register
     },
     {
-        path: '/profile',
+        path: '/profile/:user_id',
         name: 'Profile',
         component: Profile
     },
     {
-        path: '/deliver_solution',
+        path: '/deliver_solution/:problem_id',
         name: 'Deliver Solution',
         component: DeliverSolution
     },
     {
-        path: '/review_solution',
+        path: '/review_solution/:problem_id',
         name: 'Review Solution',
         component: ReviewSolution
     },
@@ -68,5 +68,16 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+router.beforeEach(async (to, from, next) => {
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    if(!user && to.name != 'Marketplace' && to.name != 'FAQ'
+             && to.name != 'Contact'     && to.name != 'Login'
+             && to.name != 'Register'){
+        next('/login')
+    }
+    else next()
+})
 
 export default router

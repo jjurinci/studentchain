@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid p-0">
-    <UpperNavbar/>
-    <router-view/>
+    <UpperNavbar :key="$route.fullPath"/>
+    <router-view :key="$route.fullPath"/>
   </div>
 </template>
 
@@ -12,7 +12,7 @@ export default {
   name: 'App',
   components:{
     UpperNavbar,
-  }
+  },
 }
 </script>
 

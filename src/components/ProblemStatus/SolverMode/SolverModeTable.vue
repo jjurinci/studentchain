@@ -1,7 +1,8 @@
 <template>
-<table class="table text-center mt-5">
-  <ProblemPopup/>
-  <SeeDeliveredSolutionPopup/>
+<table v-if="loaded" class="table text-center mt-5">
+  <ProblemPopup v-for="problem in problemsSolvedByCurrentUser" :key="problem.id" :problem="problem"/>
+  <SeeDeliveredSolutionPopup v-for="solution in solutionsByCurrentUser" :key="solution.id" :solution="solution"/>
+
   <thead class="thead-dark">
     <tr>
       <th scope="col">Problem</th>
@@ -12,40 +13,25 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
+    <tr v-for="problem in problemsSolvedByCurrentUser" :key="problem.id">
       <td>
-          <button class="btn btn-secondary" data-toggle="modal" data-target="#ProblemPopupModal">
-            Turn FA to right-linear grammar
+          <button class="btn btn-secondary" data-toggle="modal" :data-target="'#problem'+problem.id">
+            {{problem.title}}
           </button>
       </td>
-      <td>Being solved</td>
-      <td>($3) 0.0017 ETH</td>
-      <td>2 days</td>
-      <td><router-link to="/deliver_solution" class="btn btn-lg btn-success">Deliver</router-link></td>
-    </tr>
-    <tr>
+      <td>{{prettyStatus(problem.status)}}</td>
+      <td>($3) {{problem.price_eth}} ETH</td>
+      <td>{{problem.due_days}} days</td>
       <td>
-          <button class="btn btn-secondary" data-toggle="modal" data-target="#ProblemPopupModal">
-            Proof that sequence converges
-          </button>
-      </td>
-      <td>Being solved</td>
-      <td>($5) 0.0028 ETH</td>
-      <td>3 days</td>
-      <td><router-link to="/deliver_solution" class="btn btn-lg btn-success">Deliver</router-link></td>
-    </tr>
-    <tr>
-      <td>
-          <button class="btn btn-secondary" data-toggle="modal" data-target="#ProblemPopupModal">
-            C++ problems
-          </button>
-      </td>
-      <td>Sent for review</td>
-      <td>($5) 0.0028 ETH</td>
-      <td></td>
-      <td>
-        <button data-toggle="modal" data-target="#SeeDeliveredSolutionModal" class="btn btn-lg btn-success">
-          See delivered
+        <router-link v-if="problem.status != 'sent_for_review'"
+                     :to="{name: 'Deliver Solution', params: {problem_id: problem.id}}"
+                     class="btn btn-lg btn-success">
+              Deliver
+        </router-link>
+                
+        <button v-if="problem.status == 'sent_for_review'" class="btn btn-lg btn-success"
+                     data-toggle="modal" :data-target="'#solution' + latestSolutionToProblem_IDs[problem.id]">
+              See delivered
         </button>
       </td>
     </tr>
@@ -54,6 +40,9 @@
 </template>
 
 <script>
+import problemService from '@/services/problemService.js'
+import solutionService from '@/services/solutionService.js'
+
 import ProblemPopup from "@/components/Marketplace/ProblemPopup.vue"
 import SeeDeliveredSolutionPopup from "@/components/ProblemStatus/SolverMode/SeeDeliveredSolutionPopup.vue"
 
@@ -62,6 +51,42 @@ export default {
     components: {
         ProblemPopup,
         SeeDeliveredSolutionPopup
+    },
+
+    data(){
+      return{
+          currentUser: null,
+          problemsSolvedByCurrentUser: [],
+          activeSolutionsByCurrentUser: [],
+
+          latestSolutionToProblem_IDs: {},
+          loaded: false
+      }
+    },
+
+    methods: {
+      prettyStatus(statusFromDB){
+        if(statusFromDB == 'being_solved') return 'Being solved'
+        else if(statusFromDB == 'sent_for_review') return 'Sent for review'
+      },
+    },
+
+    async mounted(){
+        this.currentUser = JSON.parse(localStorage.getItem('user'))
+        this.problemsSolvedByCurrentUser = await problemService.getProblemsByCurrentSolverId(this.currentUser.id)
+
+        const problem_ids = this.problemsSolvedByCurrentUser
+                                .filter(problem => problem.status == 'sent_for_review')
+                                .map(problem => problem.id)
+
+        this.solutionsByCurrentUser = await solutionService.getSolutionsByMultipleProblemIds({data: problem_ids})        
+
+        //@TODO: Change later, latest solutions must be the solution with latest created_at_date
+        this.solutionsByCurrentUser.forEach(solution => {
+          this.latestSolutionToProblem_IDs[solution.problem_id] = solution.id
+        })
+
+        this.loaded=true
     }
 }
 </script>

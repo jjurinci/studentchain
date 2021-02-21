@@ -6,20 +6,20 @@
 
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav mx-auto">
-        <li class="nav-item active">
-            <a class="nav-link" href="#"> All</a>
+        <li @click="changeCategory( {id: 'all', name:'all'} )"
+            :class="[selectedCategory == 'all' ? 'nav-item active' : 'nav-item']">
+            <a class="nav-link" href="#all"> All</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#"> Mathematics</a>
+        
+        <li v-for="category in fourCategoriesOnly" :key="category.id"
+            @click="changeCategory(category)"
+            :class="[selectedCategory == category.name ? 'nav-item active' : 'nav-item']">
+            <a class="nav-link" :href="'#' + category.name"> {{category.name}}</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#"> Programming</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#"> Physics</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#"> See more...</a>
+        
+        <li @click="changeCategory( {id: 'see_more', name:'see_more'} )"
+            :class="[selectedCategory == 'see_more' ? 'nav-item active' : 'nav-item']">
+            <a class="nav-link" href="#see_more"> See more...</a>
         </li>
     </ul>
   </div>
@@ -27,8 +27,32 @@
 </template>
 
 <script>
+import categoryService from '@/services/categoryService.js'
+
 export default {
-    
+    name: 'Categories Navbar',
+    props: ['allProblems'],
+
+    data(){
+        return {
+            allCategories: [],
+            fourCategoriesOnly: [], //Four categories that will be on UI display 
+            selectedCategory: 'all'
+        }
+    },
+
+    methods: {
+        changeCategory(category){
+            this.selectedCategory = category.name
+            this.$emit('changeCategoryEvent', category.id)
+        }
+    },
+
+    async mounted(){
+        const response = await categoryService.getAllCategories()
+        this.allCategories = response.data
+        this.fourCategoriesOnly = this.allCategories.slice(0, 4)
+    }
 }
 </script>
 
