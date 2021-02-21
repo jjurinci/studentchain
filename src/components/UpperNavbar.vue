@@ -33,13 +33,13 @@
             :class="[$route.path == '/login' ? 'nav-item active' : 'nav-item']">
             <router-link to="/login" class="nav-link"> Login</router-link>
         </li>
-         <li v-if="!currentUser" @click="changeTab('register')" 
+         <li v-if="!currentUser" 
             :class="[$route.path == '/register' ? 'nav-item active' : 'nav-item']">
             <router-link to="/register" class="nav-link"> Register</router-link>
         </li>
 
-        <li v-if="currentUser" @click="changeTab('login')"
-            :class="[$route.path == '/profile' ? 'nav-item active' : 'nav-item']">
+        <li v-if="currentUser"
+            :class="[$route.path == ('/profile/' + currentUser.id) ? 'nav-item active' : 'nav-item']">
             <router-link :to="{name: 'Profile', params: {user_id: currentUser.id}}" class="nav-link">
               {{currentUser.username}}
             </router-link>
@@ -62,10 +62,6 @@ export default {
     },
 
     methods:{
-      changeTab(){
-        this.activeTab = this.$route.name;
-      },
-
       logout(){
         localStorage.removeItem('user')
         this.$router.push({name: 'Login'})
