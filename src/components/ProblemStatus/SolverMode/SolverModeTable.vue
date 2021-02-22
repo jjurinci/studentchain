@@ -78,14 +78,13 @@ export default {
     async mounted(){
         this.currentUser = JSON.parse(localStorage.getItem('user'))
         this.problemsSolvedByCurrentUser = await problemService.getProblemsByCurrentSolverId(this.currentUser._id)
-
+        console.log(this.currentUser._id)
 
         this.pendingProblems = this.problemsSolvedByCurrentUser.filter(problem => problem.status != 'approved' && problem.status != 'rejected')
         this.doneProblems    = this.problemsSolvedByCurrentUser.filter(problem => problem.status == 'approved' || problem.status == 'rejected')
 
         this.problemsSolvedByCurrentUser = this.pendingProblems;
-
-
+        
         const problem_ids = this.problemsSolvedByCurrentUser
                                 .filter(problem => problem.status == 'sent_for_review')
                                 .map(problem => problem._id)

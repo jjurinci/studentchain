@@ -31,6 +31,9 @@
 </template>
 
 <script>
+import web3 from '@/contracts/web3.js';
+import problemContract from '@/contracts/problemContract.js'
+
 import problemService from "@/services/problemService.js"
 import reviewService  from "@/services/reviewService.js"
 
@@ -51,6 +54,18 @@ export default {
 
     methods: {
         async approveSolution(){
+          //crypto part
+          let crypto_problem_id = this.problem.crypto_id
+          const cryptoAccount = (await web3.eth.getAccounts())[0]
+          
+          let crypto_failed = false;
+          await problemContract.methods
+                               .reviewProblem(crypto_problem_id, true)
+                               .send({from: cryptoAccount})
+                               .catch((err) => {console.log(err); crypto_failed = true})
+            
+          if(crypto_failed) return;
+
             let review = {
                 created_at: new Date().toISOString(),
                 approved: true,

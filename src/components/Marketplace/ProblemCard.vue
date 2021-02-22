@@ -2,7 +2,7 @@
 <div class="card">
   <div class="card-header">
     <router-link :to="{ name:'Profile', params: {user_id: problem.buyer._id} }" style="color: inherit;">
-      By: {{problem.buyer.username}} | Rating: 4.6/5 with {{problem.buyer.total_number_problems}} problems
+      By: {{problem.buyer.username}} | Rating: 4.6/5 with 8 problems
     </router-link>
   </div>
   
@@ -23,9 +23,8 @@
             <SolveProblemModal :problem="problem"/>
             
             <button class="btn btn-secondary mr-2" data-toggle="modal" :data-target="'#problem' + problem._id" >Details</button>
-            <button :class="[currentUser && currentUser.account_type == 'solver' ? 'btn btn-success' : 'btn btn-success disabled']"
-                    @click="solveProblem()"
-                    data-toggle="modal" :data-target="'#solve' + problem._id">Solve</button>
+            <button :class="[currentUser && currentUser.account_type == 'solver' && currentUser._id != problem.buyer_id ? 'btn btn-success' : 'btn btn-success disabled']"
+                    @click="solveProblem()">Solve</button>
         </div>
     </div>
   </div>
@@ -33,10 +32,14 @@
 </template>
 
 <script>
+import web3 from '@/contracts/web3.js';
+import problemContract from '@/contracts/problemContract.js'
+
 import problemService from '@/services/problemService.js'
 
 import ProblemPopup from '../Marketplace/ProblemPopup.vue'
 import SolveProblemModal from '../Marketplace/SolveProblemPopup.vue'
+
 export default {
     name: "Problem Card",
     props: ['problem', 'currentUser'],
@@ -68,14 +71,27 @@ export default {
           cleanedProblem.status = "being_solved"
 
           let doc = {data: cleanedProblem}
+
+          //crypto part
+          let crypto_problem_id = cleanedProblem.crypto_id
+          const cryptoAccount = (await web3.eth.getAccounts())[0]
           
+          let crypto_failed = false;
+          await problemContract.methods
+                               .solveProblem(crypto_problem_id)
+                               .send({from: cryptoAccount})
+                               .catch((err) => {console.log(err); crypto_failed = true})
+            
+          if(crypto_failed) return;
+
+          console.log("passssed")
           const response = await problemService.updateProblem(cleanedProblem._id, doc)
           if(response.status == 200){
-            const delay = async ms => new Promise(res => setTimeout(res, ms));
+            /*const delay = async ms => new Promise(res => setTimeout(res, ms));
             await delay(1500)
 
             let closeBtn = document.getElementById('solve' + cleanedProblem._id)
-            closeBtn.click()
+            closeBtn.click()*/
 
             this.reservedProblemEvent(cleanedProblem._id)
           }
