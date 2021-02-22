@@ -63,9 +63,10 @@ export default {
     async mounted(){
         this.currentUser = JSON.parse(localStorage.getItem('user'))
         this.allProblems = (await problemService.getAllProblems())
-                           .filter(problem => problem.status == "unsolved")
+                           .filter(problem => (problem.status == "unsolved"))
 
         this.filteredByCategoryProblems = this.allProblems
+        console.log(this.filteredByCategoryProblems)
     }
 }
 </script>

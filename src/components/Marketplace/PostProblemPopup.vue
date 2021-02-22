@@ -68,8 +68,13 @@
 </template>
 
 <script>
+
+import web3 from '@/contracts/web3.js';
+import problemContract from '@/contracts/problemContract.js'
+
 import problemService from '@/services/problemService.js'
 import categoryService from '@/services/categoryService.js'
+
 
 export default {
     data(){
@@ -89,8 +94,30 @@ export default {
     },
 
     methods: {
+
+        makeCryptoId(){
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        },
+
         async postProblem(){
+            //crypto part
+            let crypto_problem_id = this.makeCryptoId()
+            const cryptoAccount = (await web3.eth.getAccounts())[0]
+            const price_wei = web3.utils.toWei(String(this.insertedPrice), 'ether');
+            
+            let crypto_failed = false;
+            await problemContract.methods
+                                 .createProblem(crypto_problem_id)
+                                 .send({from: cryptoAccount , value: price_wei})
+                                 .catch(() => {crypto_failed = true})
+            
+            if(crypto_failed) return;
+
             let problem = {
+                crypto_id: crypto_problem_id,
                 created_at: new Date().toISOString(),
                 title: this.insertedTitle,
                 description: this.insertedDescription,
@@ -110,6 +137,7 @@ export default {
                 closeBtn.click()
 
                 problem._id = response.data.id
+
                 this.$emit("successfulPost", problem._id)
             }
             console.log(response)
@@ -124,6 +152,10 @@ export default {
             this.insertedDueDays = ''
             this.insertedPrice = ''
         }
+    },
+
+    beforeMount(){
+
     },
 
     async mounted(){

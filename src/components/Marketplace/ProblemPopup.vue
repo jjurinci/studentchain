@@ -4,7 +4,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header darkGreenBackground">
-                <h5 class="modal-title">By: user514 | Rating: 4.6/5 with 7 problems</h5>
+                <h5 v-if="currentUser" class="modal-title">By: {{problem.buyer.username}} | Rating: 4.6/5 with 7 problems</h5>
                 <button :id="'problem' + problem._id" type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -26,7 +26,7 @@
                         <p class="mb-1 p-0">Price: <b> ($3) {{problem.price_eth}} ETH</b></p>
                     </div>
                     <div class="col-6 text-right">
-                        <button v-if="$route.path != '/problem_status'"
+                        <button disabled v-if="$route.path != '/problem_status'"
                                 :class="[currentUser && currentUser.account_type == 'solver' ? 'btn btn-lg btn-success' : 'btn btn-lg btn-success disabled']"
                                 @click="solveProblem">Solve</button>
                     </div>

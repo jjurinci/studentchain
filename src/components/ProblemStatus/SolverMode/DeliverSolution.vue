@@ -51,6 +51,7 @@ export default {
             const doc = {data: solution}
             const response = await solutionService.postSolution(doc)
             console.log(response)
+            this.$router.push("/problem_status")
 
         }
     },
