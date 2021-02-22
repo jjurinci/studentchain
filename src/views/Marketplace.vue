@@ -3,11 +3,12 @@
         <CategoriesNavbar v-if="allProblems.length > 0"
                           :allProblems="allProblems"
                           @changeCategoryEvent="changeCategoryHandler"/>
-        <ButtonToolbar/>        
+
+        <ButtonToolbar @successfulPost="handleSuccessfulPost"/>        
 
         <div class="row ml-5 mr-5 mt-5">
-            <div v-for="problem in filteredByCategoryProblems" :key="problem.id" class="col-4 mb-5">
-                <ProblemCard :problem="problem"/>
+            <div v-for="problem in filteredByCategoryProblems" :key="problem._id" class="col-4 mb-5">
+                <ProblemCard @reservedProblemEvent="handleReservedProblem" :problem="problem" :currentUser="currentUser"/>
             </div>
         </div>
     </div>
@@ -31,7 +32,8 @@ export default {
     data(){
         return{
             allProblems: [],
-            filteredByCategoryProblems: []
+            filteredByCategoryProblems: [],
+            currentUser: null
         }
     },
 
@@ -42,11 +44,27 @@ export default {
                 this.filteredByCategoryProblems = this.allProblems
             else
                 this.filteredByCategoryProblems = this.allProblems.filter(problem => problem.category_id == category_id)
+        },
+
+        // New POST request from the database is necessary because FK's need to be joined
+        async handleSuccessfulPost(problem_id){
+            const response = await problemService.getProblemById(problem_id)
+            const problem = response.data
+            this.allProblems.push(problem)
+            this.$forceUpdate()
+        },
+
+        async handleReservedProblem(problem_id){
+            const index = this.allProblems.findIndex(problem => problem._id == problem_id)
+            this.allProblems.splice(index, 1)
         }
     },
 
     async mounted(){
-        this.allProblems = await problemService.getAllProblems()
+        this.currentUser = JSON.parse(localStorage.getItem('user'))
+        this.allProblems = (await problemService.getAllProblems())
+                           .filter(problem => problem.status == "unsolved")
+
         this.filteredByCategoryProblems = this.allProblems
     }
 }

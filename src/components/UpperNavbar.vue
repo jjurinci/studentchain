@@ -7,9 +7,9 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item logo">
-          <a class="nav-link" href="#">
+          <router-link to="/" class="nav-link">
             <img src="../assets/logo.png" height="52" width="192"/>
-          </a>
+          </router-link>
       </li>
     </ul>
 
@@ -39,8 +39,8 @@
         </li>
 
         <li v-if="currentUser"
-            :class="[$route.path == ('/profile/' + currentUser.id) ? 'nav-item active' : 'nav-item']">
-            <router-link :to="{name: 'Profile', params: {user_id: currentUser.id}}" class="nav-link">
+            :class="[$route.path == ('/profile/' + currentUser._id) ? 'nav-item active' : 'nav-item']">
+            <router-link :to="{name: 'Profile', params: {user_id: currentUser._id}}" class="nav-link">
               {{currentUser.username}}
             </router-link>
         </li>

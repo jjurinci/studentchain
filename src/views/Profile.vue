@@ -1,6 +1,6 @@
 <template>
 <div v-if="loaded" class="container-fluid p-0 text-center">
-    <ProfileNavbar v-if="currentProfile.id == loggedInUser.id"/>
+    <ProfileNavbar v-if="currentProfile._id == loggedInUser._id"/>
     <h1 class="mt-4">{{currentProfile.username}}</h1>
     <p><i class="fas fa-user" style="font-size:150px;"></i></p>
     <p> Account type: <b>{{currentProfile.account_type}}</b></p>
@@ -42,7 +42,7 @@ export default {
         this.loggedInUser = JSON.parse(localStorage.getItem('user'))
         const currentProfileId = this.$route.params.user_id
 
-        if(this.loggedInUser.id == currentProfileId) this.currentProfile = this.loggedInUser
+        if(this.loggedInUser._id == currentProfileId) this.currentProfile = this.loggedInUser
         else this.currentProfile = await userService.getUserById(currentProfileId)
 
         this.loaded=true

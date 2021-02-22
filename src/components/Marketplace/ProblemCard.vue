@@ -1,7 +1,7 @@
 <template>
 <div class="card">
   <div class="card-header">
-    <router-link :to="{ name:'Profile', params: {user_id: problem.buyer.id} }" style="color: inherit;">
+    <router-link :to="{ name:'Profile', params: {user_id: problem.buyer._id} }" style="color: inherit;">
       By: {{problem.buyer.username}} | Rating: 4.6/5 with {{problem.buyer.total_number_problems}} problems
     </router-link>
   </div>
@@ -19,11 +19,13 @@
             <p class="mb-1 p-0">Price: <b> ($3) {{problem.price_eth}} ETH</b></p>
         </div>
         <div class="col-6 text-right align-middle">
-            <ProblemPopup      :problem="problem"/>
+            <ProblemPopup @popupReservedProblemEvent="reservedProblemEvent" :problem="problem"/>
             <SolveProblemModal :problem="problem"/>
             
-            <button class="btn btn-secondary mr-2" data-toggle="modal" :data-target="'#problem' + problem.id" >Details</button>
-            <button class="btn btn-success" data-toggle="modal" :data-target="'#solve' + problem.id">Solve</button>
+            <button class="btn btn-secondary mr-2" data-toggle="modal" :data-target="'#problem' + problem._id" >Details</button>
+            <button :class="[currentUser && currentUser.account_type == 'solver' ? 'btn btn-success' : 'btn btn-success disabled']"
+                    @click="solveProblem()"
+                    data-toggle="modal" :data-target="'#solve' + problem._id">Solve</button>
         </div>
     </div>
   </div>
@@ -31,17 +33,62 @@
 </template>
 
 <script>
+import problemService from '@/services/problemService.js'
+
 import ProblemPopup from '../Marketplace/ProblemPopup.vue'
 import SolveProblemModal from '../Marketplace/SolveProblemPopup.vue'
 export default {
     name: "Problem Card",
-    props: ['problem'],
+    props: ['problem', 'currentUser'],
     components: {
         ProblemPopup,
         SolveProblemModal
     },
+
+    data(){
+      return {
+        loaded: false
+      }
+    },
+
     methods: {
-      
+      async solveProblem(){
+        const response = await problemService.getProblemById(this.problem._id)
+        const freshProblemFromDB = response.data
+
+        if(freshProblemFromDB.status == "unsolved"){
+          //deep copy so deletes don't mess up the DOM
+          let cleanedProblem = JSON.parse(JSON.stringify(this.problem)); 
+          
+          delete cleanedProblem.buyer
+          delete cleanedProblem.current_solver
+          delete cleanedProblem.category
+
+          cleanedProblem.current_solver_id = this.currentUser._id
+          cleanedProblem.status = "being_solved"
+
+          let doc = {data: cleanedProblem}
+          
+          const response = await problemService.updateProblem(cleanedProblem._id, doc)
+          if(response.status == 200){
+            const delay = async ms => new Promise(res => setTimeout(res, ms));
+            await delay(1500)
+
+            let closeBtn = document.getElementById('solve' + cleanedProblem._id)
+            closeBtn.click()
+
+            this.reservedProblemEvent(cleanedProblem._id)
+          }
+        } 
+      },
+
+      reservedProblemEvent(problem_id){
+        this.$emit("reservedProblemEvent", problem_id)
+      }
+    },
+
+    mounted(){
+      this.loaded = true
     }
 }
 </script>
@@ -59,6 +106,14 @@ export default {
 .card-title{
     font-size: 21px;
     font-weight: 900;
+}
+
+.disabled{
+  background-color: lightgray !important;
+  border: 1px solid lightgray !important;
+  color: gray !important;
+  pointer-events: none !important;
+  cursor: not-allowed !important;
 }
 
 </style>

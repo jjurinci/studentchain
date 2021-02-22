@@ -1,8 +1,8 @@
 <template>
     <div class="container">
-        <ButtonToolbarStatus @ChangeView = "handleChangeView"/>
-        <SolverModeTable v-if="mode == 'solver'"/>
-        <BuyerModeTable  v-if="mode == 'buyer'"/>
+        <ButtonToolbarStatus @ChangeView = "handleChangeView" @ChangeActive = "handleChangeActive"/>
+        <SolverModeTable v-if="mode == 'solver'" :active="active"/>
+        <BuyerModeTable  v-if="mode == 'buyer'"  :active="active"/>
     </div>
 </template>
 
@@ -21,11 +21,15 @@ export default {
     data(){
         return {
             mode: "solver",
+            active: "pending"
         }
     },
     methods: {
         handleChangeView(mode){
             this.mode = mode
+        },
+        handleChangeActive(active){
+            this.active = active
         }
     }
 }

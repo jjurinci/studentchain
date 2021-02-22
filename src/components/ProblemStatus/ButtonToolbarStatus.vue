@@ -3,12 +3,12 @@
     <div class="col-4">
         <button @click="changeActive('active')"
                 :class="[currentActive == 'active' ? 'btn btn-lg btn-secondary mr-2': 'inactive btn btn-lg btn-secondary mr-2']">
-            Active
+            Pending
         </button>
         
-        <button @click="changeActive('past')"
-                :class="[currentActive == 'past' ? 'btn btn-lg btn-secondary mr-2': 'inactive btn btn-lg btn-secondary mr-2']">
-            Past
+        <button @click="changeActive('done')"
+                :class="[currentActive == 'done' ? 'btn btn-lg btn-secondary mr-2': 'inactive btn btn-lg btn-secondary mr-2']">
+            Done
         </button>
     </div>
     
@@ -22,7 +22,8 @@
                         :class="[currentMode == 'solver' ? 'btn btn-lg btn-secondary mr-2' : 'inactive btn btn-lg btn-secondary mr-2' ]"
                         style="white-space:nowrap;">Solver mode</button>    
 
-                <small style="color: gray;">Problems that you are solving.</small>
+                <small v-if="currentUser.account_type == 'solver'"
+                       style="color: gray;">Problems that you are solving.</small>
             </div>
             <div class="col-6 text-center">
                 <button @click="changeView('buyer')"
@@ -56,15 +57,17 @@ export default {
         },
         changeActive(active){
             this.currentActive = active
+            this.$emit('ChangeActive', active)
         }
     },
 
     async mounted(){
         this.currentUser = JSON.parse(localStorage.getItem('user'))
         this.currentMode = this.currentUser.account_type
+        this.changeView(this.currentMode)
 
         if(this.currentMode == 'buyer'){
-            this.problemsBoughtByCurrentUser = await problemService.getProblemsByBuyerId(this.currentUser.id)
+            this.problemsBoughtByCurrentUser = await problemService.getProblemsByBuyerId(this.currentUser._id)
         }
     }
 }

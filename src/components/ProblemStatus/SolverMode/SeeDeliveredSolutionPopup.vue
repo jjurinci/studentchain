@@ -1,6 +1,6 @@
 <template>
 <!-- Modal -->
-<div class="modal fade" :id="'solution' + solution.id" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" :id="'solution' + solution._id" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header darkGreenBackground">
@@ -14,7 +14,7 @@
                 <form>
                      <div class="form-group">
                         <label for="description">Solution text</label>
-                        <textarea rows="5" class="form-control" id="description" :value="solution.solution_text">
+                        <textarea readonly rows="5" class="form-control" id="description" :value="solution.solution_text">
                             
                         </textarea>
                     </div>
@@ -34,7 +34,7 @@
                         <p class="mb-1 p-0">Price: <b> ($3) {{solution.problem.price_eth}} ETH</b></p>
                     </div>
                     <div class="col-6 text-right">
-                        <button class="btn btn-lg btn-success">Edit</button>
+                      <!--  <button class="btn btn-lg btn-success">Edit</button> -->
                     </div>
                 </div>
             </div>
@@ -46,7 +46,11 @@
 <script>
 export default {
     name: "See delivered solution",
-    props: ['solution']
+    props: ['solution'],
+
+    mounted(){
+        console.log(this.solution)
+    }
 }
 </script>
 

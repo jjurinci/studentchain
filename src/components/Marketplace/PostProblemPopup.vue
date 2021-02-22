@@ -1,11 +1,11 @@
 <template>
 <!-- Modal -->
-<div class="modal fade" id="PostProblemModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div v-if="loaded" class="modal fade" id="PostProblemModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header darkGreenBackground">
                 <h5 class="modal-title">Post a problem</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                <button id="closeBtn" type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -26,7 +26,7 @@
                     <div class="form-group">
                         <label for="category">Problem category</label>
                         <select v-model="insertedCategoryId" class="form-control" id="category">
-                        <option v-for="category in allCategories" :key="category.id" :value="category.id">
+                        <option v-for="category in allCategories" :key="category._id" :value="category._id">
                             {{category.name}}
                         </option>
                         </select>
@@ -74,6 +74,7 @@ import categoryService from '@/services/categoryService.js'
 export default {
     data(){
         return {
+            currentUser: null,
             allCategories: [],
 
             insertedTitle: '',
@@ -82,45 +83,55 @@ export default {
             insertedCategoryId: '',
             insertedDueDays: '',
             insertedPrice: '',
+
+            loaded: false
         }
     },
 
     methods: {
-        //This function is going to get deleted when real database replaces the mock database
-        makeid(l)
-        {
-            var text = "";
-            var char_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            for(var i=0; i < l; i++ )  
-                text += char_list.charAt(Math.floor(Math.random() * char_list.length));    
-            return text;
-        },
-
         async postProblem(){
             let problem = {
-                id: this.makeid(16),
                 created_at: new Date().toISOString(),
                 title: this.insertedTitle,
                 description: this.insertedDescription,
                 attached_files: this.insertedAttachedFiles,
                 due_days: this.insertedDueDays,
-                price: this.insertedPrice,
+                price_eth: this.insertedPrice,
                 category_id: this.insertedCategoryId,
-                buyer_id: "randomBuyerIdChangeLater",  //@TODO: Change later when login is done
-                solver_id: null,
+                buyer_id: this.currentUser._id,
+                current_solver_id: null,
                 status: "unsolved"
             }
-            console.log(problem.category_id)
             
             const data = {data: problem}
             const response = await problemService.postProblem(data)
+            if(response.status == 200){
+                let closeBtn = document.getElementById("closeBtn")
+                closeBtn.click()
+
+                problem._id = response.data.id
+                this.$emit("successfulPost", problem._id)
+            }
             console.log(response)
+            this.resetState()
+        },
+
+        resetState(){
+            this.insertedTitle = ''
+            this.insertedDescription = ''
+            this.insertedAttachedFiles = ['example1.pdf', 'example2.pdf']
+            this.insertedCategoryId = ''
+            this.insertedDueDays = ''
+            this.insertedPrice = ''
         }
     },
 
     async mounted(){
+        this.currentUser = JSON.parse(localStorage.getItem('user'))
         const response = await categoryService.getAllCategories()
         this.allCategories = response.data
+
+        this.loaded = true
     }
 }
 </script>
