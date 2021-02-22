@@ -6,20 +6,20 @@
 
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav mx-auto">
-        <li @click="changeCategory( {id: 'all', name:'all'} )"
+        <li @click="changeCategory( {_id: 'all', name:'all'} )"
             :class="[selectedCategory == 'all' ? 'nav-item active' : 'nav-item']">
-            <a class="nav-link" href="#all"> All</a>
+            <a class="nav-link"> All</a>
         </li>
         
-        <li v-for="category in fourCategoriesOnly" :key="category.id"
+        <li v-for="category in fourCategoriesOnly" :key="category._id"
             @click="changeCategory(category)"
             :class="[selectedCategory == category.name ? 'nav-item active' : 'nav-item']">
-            <a class="nav-link" :href="'#' + category.name"> {{category.name}}</a>
+            <a class="nav-link"> {{category.name}}</a>
         </li>
         
-        <li @click="changeCategory( {id: 'see_more', name:'see_more'} )"
+        <li @click="changeCategory( {_id: 'see_more', name:'see_more'} )"
             :class="[selectedCategory == 'see_more' ? 'nav-item active' : 'nav-item']">
-            <a class="nav-link" href="#see_more"> See more...</a>
+            <a class="nav-link"> See more...</a>
         </li>
     </ul>
   </div>
@@ -44,7 +44,7 @@ export default {
     methods: {
         changeCategory(category){
             this.selectedCategory = category.name
-            this.$emit('changeCategoryEvent', category.id)
+            this.$emit('changeCategoryEvent', category._id)
         }
     },
 
@@ -69,6 +69,7 @@ export default {
 
 .navbar-nav li{
     margin-right: 100px;
+    cursor: pointer;
 }
 
 .active{

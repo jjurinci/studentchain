@@ -1,7 +1,7 @@
 <template>
 <table v-if="loaded" class="table text-center mt-5">
-  <ProblemPopup v-for="problem in problemsSolvedByCurrentUser" :key="problem.id" :problem="problem"/>
-  <SeeDeliveredSolutionPopup v-for="solution in solutionsByCurrentUser" :key="solution.id" :solution="solution"/>
+  <ProblemPopup v-for="problem in problemsSolvedByCurrentUser" :key="problem._id" :problem="problem"/>
+  <SeeDeliveredSolutionPopup v-for="solution in solutionsByCurrentUser" :key="solution._id" :solution="solution"/>
 
   <thead class="thead-dark">
     <tr>
@@ -13,9 +13,9 @@
     </tr>
   </thead>
   <tbody>
-    <tr v-for="problem in problemsSolvedByCurrentUser" :key="problem.id">
+    <tr v-for="problem in problemsSolvedByCurrentUser" :key="problem._id">
       <td>
-          <button class="btn btn-secondary" data-toggle="modal" :data-target="'#problem'+problem.id">
+          <button class="btn btn-secondary" data-toggle="modal" :data-target="'#problem'+problem._id">
             {{problem.title}}
           </button>
       </td>
@@ -24,13 +24,13 @@
       <td>{{problem.due_days}} days</td>
       <td>
         <router-link v-if="problem.status != 'sent_for_review'"
-                     :to="{name: 'Deliver Solution', params: {problem_id: problem.id}}"
+                     :to="{name: 'Deliver Solution', params: {problem_id: problem._id}}"
                      class="btn btn-lg btn-success">
               Deliver
         </router-link>
                 
         <button v-if="problem.status == 'sent_for_review'" class="btn btn-lg btn-success"
-                     data-toggle="modal" :data-target="'#solution' + latestSolutionToProblem_IDs[problem.id]">
+                     data-toggle="modal" :data-target="'#solution' + latestSolutionToProblem_IDs[problem._id]">
               See delivered
         </button>
       </td>
@@ -73,17 +73,17 @@ export default {
 
     async mounted(){
         this.currentUser = JSON.parse(localStorage.getItem('user'))
-        this.problemsSolvedByCurrentUser = await problemService.getProblemsByCurrentSolverId(this.currentUser.id)
+        this.problemsSolvedByCurrentUser = await problemService.getProblemsByCurrentSolverId(this.currentUser._id)
 
         const problem_ids = this.problemsSolvedByCurrentUser
                                 .filter(problem => problem.status == 'sent_for_review')
-                                .map(problem => problem.id)
+                                .map(problem => problem._id)
 
         this.solutionsByCurrentUser = await solutionService.getSolutionsByMultipleProblemIds({data: problem_ids})        
 
         //@TODO: Change later, latest solutions must be the solution with latest created_at_date
         this.solutionsByCurrentUser.forEach(solution => {
-          this.latestSolutionToProblem_IDs[solution.problem_id] = solution.id
+          this.latestSolutionToProblem_IDs[solution.problem_id] = solution._id
         })
 
         this.loaded=true

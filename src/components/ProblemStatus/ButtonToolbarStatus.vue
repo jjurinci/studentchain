@@ -64,7 +64,7 @@ export default {
         this.currentMode = this.currentUser.account_type
 
         if(this.currentMode == 'buyer'){
-            this.problemsBoughtByCurrentUser = await problemService.getProblemsByBuyerId(this.currentUser.id)
+            this.problemsBoughtByCurrentUser = await problemService.getProblemsByBuyerId(this.currentUser._id)
         }
     }
 }

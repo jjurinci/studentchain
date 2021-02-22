@@ -6,7 +6,7 @@ const url = config.dmlUrl
 export default {
     async getAllProblems(){
         const response = await axios.get(url + "/problems")
-        return response.data.data
+        return response.data
     },
 
     async getProblemById(problem_id){
@@ -16,7 +16,7 @@ export default {
 
     async postProblem(data){
         const response = await axios.post(url + "/problems", data)
-        return response.data
+        return response
     },
 
     async updateProblem(problem_id, data){

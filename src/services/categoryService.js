@@ -6,6 +6,6 @@ const url = config.dmlUrl
 export default {
     async getAllCategories(){
         const response = await axios.get(url + "/categories")
-        return response.data
+        return response
     }
 }

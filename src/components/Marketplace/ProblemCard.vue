@@ -1,7 +1,7 @@
 <template>
 <div class="card">
   <div class="card-header">
-    <router-link :to="{ name:'Profile', params: {user_id: problem.buyer.id} }" style="color: inherit;">
+    <router-link :to="{ name:'Profile', params: {user_id: problem.buyer._id} }" style="color: inherit;">
       By: {{problem.buyer.username}} | Rating: 4.6/5 with {{problem.buyer.total_number_problems}} problems
     </router-link>
   </div>
@@ -22,8 +22,8 @@
             <ProblemPopup      :problem="problem"/>
             <SolveProblemModal :problem="problem"/>
             
-            <button class="btn btn-secondary mr-2" data-toggle="modal" :data-target="'#problem' + problem.id" >Details</button>
-            <button class="btn btn-success" data-toggle="modal" :data-target="'#solve' + problem.id">Solve</button>
+            <button class="btn btn-secondary mr-2" data-toggle="modal" :data-target="'#problem' + problem._id" >Details</button>
+            <button class="btn btn-success" data-toggle="modal" :data-target="'#solve' + problem._id">Solve</button>
         </div>
     </div>
   </div>

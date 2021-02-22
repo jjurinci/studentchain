@@ -1,6 +1,7 @@
 <template>
 <table v-if="loaded" class="table text-center mt-5">
-  <EditProblemPopup v-for="problem in problemsBoughtByCurrentUser" :key="problem.id" :problem="problem"/>
+  <EditProblemPopup v-for="problem in problemsBoughtByCurrentUser" :key="problem._id" :problem="problem"
+                    @triggerDeleteEvent="handleDeleteProblem"/>
   <thead class="thead-dark">
     <tr>
       <th scope="col">Problem</th>
@@ -11,9 +12,9 @@
     </tr>
   </thead>
   <tbody>
-    <tr v-for="problem in problemsBoughtByCurrentUser" :key="problem.id">
+    <tr v-for="problem in problemsBoughtByCurrentUser" :key="problem._id">
       <td>
-          <button class="btn btn-secondary" data-toggle="modal" :data-target="'#problemEdit' + problem.id">
+          <button class="btn btn-secondary" data-toggle="modal" :data-target="'#problemEdit' + problem._id">
             {{problem.title}}
           </button>
       </td>
@@ -22,7 +23,7 @@
       <td>X days</td>
       <td>
         <router-link v-if="problem.status == 'waiting_for_review'" 
-                    :to="{name: 'Review Solution', params: {problem_id: problem.id } }"
+                    :to="{name: 'Review Solution', params: {problem_id: problem._id } }"
                     class="btn btn-lg btn-success">Review solution</router-link>
       </td>
     </tr>
@@ -52,12 +53,17 @@ export default {
         if(problem.status == 'unsolved') return "Unsolved"
         else if(problem.status == 'being_solved') return "Being solved by " + problem.solver.username 
         else if(problem.status == 'waiting_for_review') return "Waiting for review"
+      },
+
+      async handleDeleteProblem(problem_id){
+          let index = this.problemsBoughtByCurrentUser.findIndex(prob => prob._id == problem_id)
+          this.problemsBoughtByCurrentUser.splice(index, 1)
       }
     },
 
     async mounted(){
       this.currentUser = JSON.parse(localStorage.getItem('user'))
-      this.problemsBoughtByCurrentUser = await problemService.getProblemsByBuyerId(this.currentUser.id)
+      this.problemsBoughtByCurrentUser = await problemService.getProblemsByBuyerId(this.currentUser._id)
       this.loaded = true
     }
 }

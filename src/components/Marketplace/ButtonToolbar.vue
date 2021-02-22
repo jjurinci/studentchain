@@ -1,7 +1,7 @@
 <template>
 <div class="row mt-4 ml-5 mr-5">
   <div class="col-2">
-    <PostProblemPopup/>
+    <PostProblemPopup @successfulPost="successfulPost"/>
     <button class="btn btn-lg btn-success" data-toggle="modal" data-target="#PostProblemModal">Post a problem</button>
   </div>
   
@@ -20,6 +20,12 @@ export default {
   name: "Button Toolbar",
   components: {
     PostProblemPopup
+  },
+
+  methods: {
+    successfulPost(problem){
+      this.$emit("successfulPost", problem)
+    }
   }
 };
 </script>

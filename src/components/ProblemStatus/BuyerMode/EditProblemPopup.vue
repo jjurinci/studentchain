@@ -1,17 +1,17 @@
 <template>
 <!-- Modal -->
-<div class="modal fade" :id="'problemEdit' + problem.id" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" :id="'problemEdit' + problem._id" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header darkGreenBackground">
                 <h5 class="modal-title">Edit a problem</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                <button :id="'closeModalBtn' + problem._id" type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <div class="modal-body text-center mt-3">
-                <form>
+                <form onsubmit="return false;">
                     <div class="form-group">
                         <label for="title">Title</label>
                         <input class="form-control" id="title" :value="problem.title"/>
@@ -48,7 +48,8 @@
                         <button class="btn btn-lg btn-secondary">Cancel</button>
                     </div>
                     <div class="col-4 text-center">
-                        <button class="btn btn-lg btn-secondary" style="background-color: black;">Delete</button>
+                        <button @click.prevent="deleteProblem()"
+                                class="btn btn-lg btn-secondary" style="background-color: black;">Delete</button>
                     </div>
                     <div class="col-4 text-right">
                         <button class="btn btn-lg btn-success">Edit</button>
@@ -61,9 +62,22 @@
 </template>
 
 <script>
+import problemService from '@/services/problemService.js'
 export default {
     name: "Edit Problem Popup",
-    props: ["problem"]
+    props: ["problem"],
+
+    methods:{
+        async deleteProblem(){
+            const response = await problemService.deleteProblem(this.problem._id)
+            
+            if(response.status == 200){
+                let closeBtn = document.getElementById('closeModalBtn' + this.problem._id)
+                closeBtn.click()
+                this.$emit('triggerDeleteEvent', this.problem._id)
+            }
+        }
+    }
 }
 </script>
 

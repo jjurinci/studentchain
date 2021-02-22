@@ -3,10 +3,11 @@
         <CategoriesNavbar v-if="allProblems.length > 0"
                           :allProblems="allProblems"
                           @changeCategoryEvent="changeCategoryHandler"/>
-        <ButtonToolbar/>        
+
+        <ButtonToolbar @successfulPost="handleSuccessfulPost"/>        
 
         <div class="row ml-5 mr-5 mt-5">
-            <div v-for="problem in filteredByCategoryProblems" :key="problem.id" class="col-4 mb-5">
+            <div v-for="problem in filteredByCategoryProblems" :key="problem._id" class="col-4 mb-5">
                 <ProblemCard :problem="problem"/>
             </div>
         </div>
@@ -42,6 +43,13 @@ export default {
                 this.filteredByCategoryProblems = this.allProblems
             else
                 this.filteredByCategoryProblems = this.allProblems.filter(problem => problem.category_id == category_id)
+        },
+
+        async handleSuccessfulPost(problem_id){
+            const response = await problemService.getProblemById(problem_id)
+            const problem = response.data
+            this.allProblems.push(problem)
+            this.$forceUpdate()
         }
     },
 
