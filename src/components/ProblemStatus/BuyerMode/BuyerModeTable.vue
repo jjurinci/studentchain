@@ -22,7 +22,7 @@
       <td>($5) {{problem.price_eth}} ETH</td>
       <td>X days</td>
       <td>
-        <router-link v-if="problem.status == 'waiting_for_review'" 
+        <router-link v-if="problem.status == 'sent_for_review'" 
                     :to="{name: 'Review Solution', params: {problem_id: problem._id } }"
                     class="btn btn-lg btn-success">Review solution</router-link>
       </td>
@@ -36,6 +36,7 @@ import problemService from '@/services/problemService.js'
 import EditProblemPopup from "../BuyerMode/EditProblemPopup.vue"
 export default {
     name: "Buyer Mode Table",
+    props: ["active"],
     components: {
         EditProblemPopup
     },
@@ -43,6 +44,7 @@ export default {
     data(){
       return {
         currentUser: null,
+        allProblemsBoughtByUser: [], 
         problemsBoughtByCurrentUser: [],
         loaded: false
       }
@@ -52,7 +54,9 @@ export default {
       prettyStatus(problem){
         if(problem.status == 'unsolved') return "Unsolved"
         else if(problem.status == 'being_solved') return "Being solved by " + problem.solver.username 
-        else if(problem.status == 'waiting_for_review') return "Waiting for review"
+        else if(problem.status == 'sent_for_review') return "Waiting for review"
+        else if(problem.status == 'approved') return "Approved"
+        else if(problem.status == 'rejected') return "Rejected"
       },
 
       async handleDeleteProblem(problem_id){
@@ -64,7 +68,20 @@ export default {
     async mounted(){
       this.currentUser = JSON.parse(localStorage.getItem('user'))
       this.problemsBoughtByCurrentUser = await problemService.getProblemsByBuyerId(this.currentUser._id)
+
+      this.pendingProblems = this.problemsBoughtByCurrentUser.filter(problem => problem.status != 'approved' && problem.status != 'rejected')
+      this.doneProblems    = this.problemsBoughtByCurrentUser.filter(problem => problem.status == 'approved' || problem.status == 'rejected')
+
+      this.problemsBoughtByCurrentUser = this.pendingProblems;
+
       this.loaded = true
+    },
+
+    watch: {
+      active: function(val) {
+        if(val == 'active') this.problemsBoughtByCurrentUser = this.pendingProblems
+        else if(val == 'done') this.problemsBoughtByCurrentUser = this.doneProblems
+      }
     }
 }
 </script>

@@ -5,7 +5,7 @@
         <div class="modal-content">
             <div class="modal-header darkGreenBackground">
                 <h5 class="modal-title">By: user514 | Rating: 4.6/5 with 7 problems</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                <button :id="'problem' + problem._id" type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -26,7 +26,9 @@
                         <p class="mb-1 p-0">Price: <b> ($3) {{problem.price_eth}} ETH</b></p>
                     </div>
                     <div class="col-6 text-right">
-                        <button class="btn btn-lg btn-success">Solve</button>
+                        <button v-if="$route.path != '/problem_status'"
+                                :class="[currentUser && currentUser.account_type == 'solver' ? 'btn btn-lg btn-success' : 'btn btn-lg btn-success disabled']"
+                                @click="solveProblem">Solve</button>
                     </div>
                 </div>
             </div>
@@ -36,11 +38,51 @@
 </template>
 
 <script>
+import problemService from '@/services/problemService.js'
 export default {
     name: "Problem Popup",
     props: ["problem"],
 
+    data(){
+        return {
+            currentUser: null
+        }
+    },
+
+    methods: {
+        async solveProblem(){
+            const response = await problemService.getProblemById(this.problem._id)
+            const freshProblemFromDB = response.data
+
+            if(freshProblemFromDB.status == "unsolved"){
+                //deep copy so deletes don't mess up the DOM
+                let cleanedProblem = JSON.parse(JSON.stringify(this.problem)); 
+                
+                delete cleanedProblem.buyer
+                delete cleanedProblem.current_solver
+                delete cleanedProblem.category
+
+                cleanedProblem.current_solver_id = this.currentUser._id
+                cleanedProblem.status = "being_solved"
+
+                let doc = {data: cleanedProblem}
+                
+                const response = await problemService.updateProblem(cleanedProblem._id, doc)
+                if(response.status == 200){
+                    const delay = async ms => new Promise(res => setTimeout(res, ms));
+                    await delay(500)
+
+                    let closeBtn = document.getElementById('problem' + cleanedProblem._id)
+                    closeBtn.click()
+
+                    this.$emit("popupReservedProblemEvent", cleanedProblem._id)
+                }
+            } 
+        } 
+    },
+
     mounted(){
+        this.currentUser = JSON.parse(localStorage.getItem('user'))
     }
 }
 </script>
@@ -49,5 +91,13 @@ export default {
 .darkGreenBackground{
     background-color: #43896D;
     color: white;
+}
+
+.disabled{
+  background-color: lightgray !important;
+  border: 1px solid lightgray !important;
+  color: gray !important;
+  pointer-events: none !important;
+  cursor: not-allowed !important;
 }
 </style>

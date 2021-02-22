@@ -21,7 +21,7 @@ export default {
 
     async updateProblem(problem_id, data){
         const response = await axios.put(url + "/problems/" + problem_id, data)
-        return response.data 
+        return response
     },
 
     async deleteProblem(problem_id){

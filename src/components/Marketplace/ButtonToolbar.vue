@@ -8,8 +8,8 @@
   <div class="col-8 text-center"></div>
   
   <div class="col-2 text-right">
-    <button class="btn btn-lg btn-secondary mr-2">Filter</button>
-    <button class="btn btn-lg btn-secondary">Sort</button>
+    <!--<button class="btn btn-lg btn-secondary mr-2">Filter</button>
+    <button class="btn btn-lg btn-secondary">Sort</button> -->
   </div>
 </div>
 </template>
@@ -23,8 +23,8 @@ export default {
   },
 
   methods: {
-    successfulPost(problem){
-      this.$emit("successfulPost", problem)
+    successfulPost(problem_id){
+      this.$emit("successfulPost", problem_id)
     }
   }
 };

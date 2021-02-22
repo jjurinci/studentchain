@@ -23,7 +23,7 @@
       <td>($3) {{problem.price_eth}} ETH</td>
       <td>{{problem.due_days}} days</td>
       <td>
-        <router-link v-if="problem.status != 'sent_for_review'"
+        <router-link v-if="problem.status == 'being_solved'"
                      :to="{name: 'Deliver Solution', params: {problem_id: problem._id}}"
                      class="btn btn-lg btn-success">
               Deliver
@@ -48,6 +48,7 @@ import SeeDeliveredSolutionPopup from "@/components/ProblemStatus/SolverMode/See
 
 export default {
     name: "Solver Mode Table",
+    props: ["active"],
     components: {
         ProblemPopup,
         SeeDeliveredSolutionPopup
@@ -66,8 +67,11 @@ export default {
 
     methods: {
       prettyStatus(statusFromDB){
-        if(statusFromDB == 'being_solved') return 'Being solved'
-        else if(statusFromDB == 'sent_for_review') return 'Sent for review'
+        if(statusFromDB == 'unsolved') return "Unsolved"
+        else if(statusFromDB == 'being_solved') return "Being solved" 
+        else if(statusFromDB == 'sent_for_review') return "Waiting for review"
+        else if(statusFromDB == 'approved') return "Approved"
+        else if(statusFromDB == 'rejected') return "Rejected"
       },
     },
 
@@ -75,18 +79,33 @@ export default {
         this.currentUser = JSON.parse(localStorage.getItem('user'))
         this.problemsSolvedByCurrentUser = await problemService.getProblemsByCurrentSolverId(this.currentUser._id)
 
+
+        this.pendingProblems = this.problemsSolvedByCurrentUser.filter(problem => problem.status != 'approved' && problem.status != 'rejected')
+        this.doneProblems    = this.problemsSolvedByCurrentUser.filter(problem => problem.status == 'approved' || problem.status == 'rejected')
+
+        this.problemsSolvedByCurrentUser = this.pendingProblems;
+
+
         const problem_ids = this.problemsSolvedByCurrentUser
                                 .filter(problem => problem.status == 'sent_for_review')
                                 .map(problem => problem._id)
 
-        this.solutionsByCurrentUser = await solutionService.getSolutionsByMultipleProblemIds({data: problem_ids})        
-
+        this.solutionsByCurrentUser = (await solutionService.getSolutionsByMultipleProblemIds({data: problem_ids})).data
+        
         //@TODO: Change later, latest solutions must be the solution with latest created_at_date
         this.solutionsByCurrentUser.forEach(solution => {
           this.latestSolutionToProblem_IDs[solution.problem_id] = solution._id
         })
 
+        console.log(this.solutionsByCurrentUser)
         this.loaded=true
+    },
+    
+    watch: {
+      active: function(val) {
+        if(val == 'active') this.problemsSolvedByCurrentUser = this.pendingProblems
+        else if(val == 'done') this.problemsSolvedByCurrentUser = this.doneProblems
+      }
     }
 }
 </script>

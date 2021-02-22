@@ -1,6 +1,6 @@
 <template>
 <!-- Modal -->
-<div v-if="loaded && showModal" class="modal fade" id="PostProblemModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div v-if="loaded" class="modal fade" id="PostProblemModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header darkGreenBackground">
@@ -84,7 +84,6 @@ export default {
             insertedDueDays: '',
             insertedPrice: '',
 
-            showModal: true,
             loaded: false
         }
     },
@@ -114,6 +113,16 @@ export default {
                 this.$emit("successfulPost", problem._id)
             }
             console.log(response)
+            this.resetState()
+        },
+
+        resetState(){
+            this.insertedTitle = ''
+            this.insertedDescription = ''
+            this.insertedAttachedFiles = ['example1.pdf', 'example2.pdf']
+            this.insertedCategoryId = ''
+            this.insertedDueDays = ''
+            this.insertedPrice = ''
         }
     },
 

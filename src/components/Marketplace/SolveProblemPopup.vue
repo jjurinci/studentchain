@@ -5,7 +5,7 @@
         <div class="modal-content">
             <div class="modal-header darkGreenBackground">
                 <h5 class="modal-title">{{problem.title}}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                <button :id="'solve' + problem._id" type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
