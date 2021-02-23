@@ -23,7 +23,7 @@
                 <div class="row w-100">
                     <div class="col-6 text-left">
                         <p class="mb-1 p-0">Due: <b>{{problem.due_days}} days</b></p>
-                        <p class="mb-1 p-0">Price: <b> ($3) {{problem.price_eth}} ETH</b></p>
+                        <p class="mb-1 p-0">Price: <b> {{problem.price_eth}} ETH</b></p>
                     </div>
                     <div class="col-6 text-right">
                         <button style="background-color: lightgray !important; border:none;"

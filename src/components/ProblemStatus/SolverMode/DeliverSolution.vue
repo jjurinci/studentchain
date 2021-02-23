@@ -49,8 +49,7 @@ export default {
             }
 
             const doc = {data: solution}
-            const response = await solutionService.postSolution(doc)
-            console.log(response)
+            await solutionService.postSolution(doc)
             this.$router.push("/problem_status")
 
         }
@@ -62,7 +61,6 @@ export default {
         const problem_id = this.$route.params.problem_id
         const response   = await problemService.getProblemById(problem_id)
         this.problem     = response.data
-        console.log(this.problem)
         this.loaded = true
     }
 }

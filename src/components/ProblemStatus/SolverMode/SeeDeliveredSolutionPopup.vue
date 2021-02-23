@@ -31,7 +31,7 @@
                 <div class="row w-100">
                     <div class="col-6 text-left">
                         <p class="mb-1 p-0">Review due: <b>3 days</b></p>
-                        <p class="mb-1 p-0">Price: <b> ($3) {{solution.problem.price_eth}} ETH</b></p>
+                        <p class="mb-1 p-0">Price: <b> {{solution.problem.price_eth}} ETH</b></p>
                     </div>
                     <div class="col-6 text-right">
                       <!--  <button class="btn btn-lg btn-success">Edit</button> -->
@@ -49,7 +49,6 @@ export default {
     props: ['solution'],
 
     mounted(){
-        console.log(this.solution)
     }
 }
 </script>

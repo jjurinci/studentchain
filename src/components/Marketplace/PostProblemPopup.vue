@@ -44,9 +44,9 @@
                                    class="form-control" id="dueDays" placeholder="2 days"/>
                         </div>
                         <div class="col-6">
-                            <label for="price">Price</label>
+                            <label for="price">Price (ETH)</label>
                             <input v-model="insertedPrice"
-                                   class="form-control" id="price" placeholder="0.0017 ETH ($3)"/>
+                                   class="form-control" id="price" placeholder="0.0017 ETH"/>
                         </div>
                     </div>
                 </form>
@@ -104,6 +104,8 @@ export default {
 
         async postProblem(){
             //crypto part
+            if(!web3) return;
+
             let crypto_problem_id = this.makeCryptoId()
             const cryptoAccount = (await web3.eth.getAccounts())[0]
             const price_wei = web3.utils.toWei(String(this.insertedPrice), 'ether');
@@ -140,7 +142,6 @@ export default {
 
                 this.$emit("successfulPost", problem._id)
             }
-            console.log(response)
             this.resetState()
         },
 

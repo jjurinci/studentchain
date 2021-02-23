@@ -95,7 +95,7 @@ export default {
 }
 
 #centerItems li{
-    font-size: 18px;
+    font-size: 16px;
     margin-right: 80px;
 }
 

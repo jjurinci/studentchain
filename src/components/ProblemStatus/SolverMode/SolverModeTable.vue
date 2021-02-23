@@ -20,7 +20,7 @@
           </button>
       </td>
       <td>{{prettyStatus(problem.status)}}</td>
-      <td>($3) {{problem.price_eth}} ETH</td>
+      <td>{{problem.price_eth}} ETH</td>
       <td>{{problem.due_days}} days</td>
       <td>
         <router-link v-if="problem.status == 'being_solved'"
@@ -78,7 +78,6 @@ export default {
     async mounted(){
         this.currentUser = JSON.parse(localStorage.getItem('user'))
         this.problemsSolvedByCurrentUser = await problemService.getProblemsByCurrentSolverId(this.currentUser._id)
-        console.log(this.currentUser._id)
 
         this.pendingProblems = this.problemsSolvedByCurrentUser.filter(problem => problem.status != 'approved' && problem.status != 'rejected')
         this.doneProblems    = this.problemsSolvedByCurrentUser.filter(problem => problem.status == 'approved' || problem.status == 'rejected')
@@ -96,7 +95,6 @@ export default {
           this.latestSolutionToProblem_IDs[solution.problem_id] = solution._id
         })
 
-        console.log(this.solutionsByCurrentUser)
         this.loaded=true
     },
     

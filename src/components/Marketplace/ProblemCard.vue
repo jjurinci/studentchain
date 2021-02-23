@@ -14,7 +14,7 @@
 
   <div class="card-footer">
     <div class="row">
-        <div class="col-6 text-left">
+        <div class="col-6 text-left" style="font-size:14px;">
             <p class="mb-1 p-0">Due: <b>{{problem.due_days}} days</b></p>
             <p class="mb-1 p-0">Price: <b> {{problem.price_eth}} ETH</b></p>
         </div>
@@ -56,6 +56,8 @@ export default {
 
     methods: {
       async solveProblem(){
+        if(!web3) return;
+        
         const response = await problemService.getProblemById(this.problem._id)
         const freshProblemFromDB = response.data
 
@@ -80,11 +82,10 @@ export default {
           await problemContract.methods
                                .solveProblem(crypto_problem_id)
                                .send({from: cryptoAccount})
-                               .catch((err) => {console.log(err); crypto_failed = true})
+                               .catch(() => {crypto_failed = true})
             
           if(crypto_failed) return;
 
-          console.log("passssed")
           const response = await problemService.updateProblem(cleanedProblem._id, doc)
           if(response.status == 200){
             /*const delay = async ms => new Promise(res => setTimeout(res, ms));

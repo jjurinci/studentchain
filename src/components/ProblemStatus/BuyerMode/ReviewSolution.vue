@@ -54,6 +54,8 @@ export default {
 
     methods: {
         async approveSolution(){
+          if(!web3) return;
+          
           //crypto part
           let crypto_problem_id = this.problem.crypto_id
           const cryptoAccount = (await web3.eth.getAccounts())[0]
@@ -62,7 +64,7 @@ export default {
           await problemContract.methods
                                .reviewProblem(crypto_problem_id, true)
                                .send({from: cryptoAccount})
-                               .catch((err) => {console.log(err); crypto_failed = true})
+                               .catch(() => {crypto_failed = true})
             
           if(crypto_failed) return;
 
@@ -76,8 +78,7 @@ export default {
                 problem_id: this.problem._id
             }
             let doc = {data : review}
-            const response = await reviewService.postReview(doc)
-            console.log("r:" , response)
+            await reviewService.postReview(doc)
 
             this.$router.push("/transaction_approved")
         },
@@ -93,8 +94,8 @@ export default {
                 problem_id: this.problem._id
             }
             let doc = {data : review}
-            const response = await reviewService.postReview(doc)
-            console.log("r:" , response)
+            await reviewService.postReview(doc)
+            
 
             this.$router.push("/problem_status")
         }

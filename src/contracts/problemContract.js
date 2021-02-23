@@ -48,6 +48,7 @@ const abi = [
 	}
 ]
 
-const instance = new web3.eth.Contract(abi, address);
+let instance = null
+if(web3) instance = new web3.eth.Contract(abi, address);
 
 export default instance;
