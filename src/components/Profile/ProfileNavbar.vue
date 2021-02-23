@@ -30,11 +30,18 @@ export default {
 .navbar{
     background-color: #404447;
     font-size:16px;
-    font-family: "monospace", "Verdana";
+    height: 55px;
+    font-family: "Verdana", "Monospace";
 }
 
-.navbar a, .navbar li{
+.navbar li{
     color: white;
+}
+
+.navbar a{
+    color: white;
+    white-space: nowrap;
+    line-height: 1;
 }
 
 .navbar-nav li{

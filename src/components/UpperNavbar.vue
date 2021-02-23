@@ -15,16 +15,24 @@
 
     <ul id="centerItems" class="navbar-nav mx-auto">
         <li :class="[$route.path == '/' ? 'nav-item active' : 'nav-item']">
-            <router-link to="/" class="nav-link"> MARKETPLACE</router-link>
+            <router-link to="/" class="nav-link">
+              <i class="fas fa-store-alt"></i> MARKETPLACE
+            </router-link>
         </li>
         <li :class="[$route.path == '/problem_status' ? 'nav-item active' : 'nav-item']">
-            <router-link to="/problem_status" class="nav-link"> PROBLEM STATUS</router-link>
+            <router-link to="/problem_status" class="nav-link">
+              <i class="far fa-list-alt"></i> PROBLEM STATUS
+            </router-link>
         </li>
         <li :class="[$route.path == '/faq' ? 'nav-item active' : 'nav-item']">
-            <router-link to="/faq" class="nav-link"> FAQ</router-link>
+            <router-link to="/faq" class="nav-link">
+              <i class="fas fa-question-circle"></i> FAQ
+            </router-link>
         </li>
         <li :class="[$route.path == '/contact' ? 'nav-item active' : 'nav-item']">
-            <router-link to="/contact" class="nav-link"> CONTACT</router-link>
+            <router-link to="/contact" class="nav-link">
+              <i class="far fa-address-card"></i> CONTACT
+            </router-link>
         </li>
     </ul>
 
@@ -41,11 +49,11 @@
         <li v-if="currentUser"
             :class="[$route.path == ('/profile/' + currentUser._id) ? 'nav-item active' : 'nav-item']">
             <router-link :to="{name: 'Profile', params: {user_id: currentUser._id}}" class="nav-link">
-              {{currentUser.username}}
+              <i class="far fa-user"></i> {{currentUser.username}}
             </router-link>
         </li>
          <li v-if="currentUser" class="nav-item">
-            <a @click="logout" href="" class="nav-link"> logout</a>
+            <a @click="logout" href="" class="nav-link"><i class="fas fa-sign-out-alt"></i> logout</a>
         </li>
     </ul>
   </div>
@@ -79,7 +87,7 @@ export default {
 .navbar{
     background-color: #32373B;
     font-size:17px;
-    font-family: "Monospace", "Verdana";
+    font-family: "Verdana", "Monospace";
 }
 
 .navbar a, .navbar li{
@@ -87,8 +95,14 @@ export default {
 }
 
 #centerItems li{
-    font-size: 19px;
-    margin-right: 100px;
+    font-size: 18px;
+    margin-right: 80px;
+}
+
+i {
+  font-size: 20px;
+  vertical-align: middle !important;
+  margin-right: 1px;
 }
 
 .active{

@@ -7,19 +7,18 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav mx-auto">
         <li @click="changeCategory( {_id: 'all', name:'all'} )"
-            :class="[selectedCategory == 'all' ? 'nav-item active' : 'nav-item']">
-            <a class="nav-link"> All</a>
+            class="nav-item">
+            <a :class="[selectedCategory == 'all' ? 'nav-link active' : 'nav-link']"> All</a>
         </li>
         
         <li v-for="category in fourCategoriesOnly" :key="category._id"
             @click="changeCategory(category)"
-            :class="[selectedCategory == category.name ? 'nav-item active' : 'nav-item']">
-            <a class="nav-link"> {{category.name}}</a>
+            class='nav-item'>
+            <a :class="[selectedCategory == category.name ? 'nav-link active' : 'nav-link']"> {{category.name}}</a>
         </li>
         
-        <li @click="changeCategory( {_id: 'see_more', name:'see_more'} )"
-            :class="[selectedCategory == 'see_more' ? 'nav-item active' : 'nav-item']">
-            <a class="nav-link"> See more...</a>
+        <li @click="changeCategory( {_id: 'see_more', name:'see_more'} )" class="nav-item">
+            <a :class="[selectedCategory == 'see_more' ? 'nav-link active' : 'nav-link']"> See more...</a>
         </li>
     </ul>
   </div>
@@ -60,11 +59,18 @@ export default {
 .navbar{
     background-color: #404447;
     font-size:16px;
-    font-family: "monospace", "Verdana";
+    height: 55px;
+    font-family: "Verdana", "Monospace";
 }
 
-.navbar a, .navbar li{
+.navbar li{
     color: white;
+}
+
+.navbar a{
+    color: white;
+    white-space: nowrap;
+    line-height: 1;
 }
 
 .navbar-nav li{

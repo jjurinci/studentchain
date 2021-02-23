@@ -6,8 +6,8 @@
 
         <ButtonToolbar @successfulPost="handleSuccessfulPost"/>        
 
+            <div v-for="problem in filteredByCategoryProblems" :key="problem._id" class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch mb-5">
         <div class="row ml-5 mr-5 mt-5">
-            <div v-for="problem in filteredByCategoryProblems" :key="problem._id" class="col-4 mb-5">
                 <ProblemCard @reservedProblemEvent="handleReservedProblem" :problem="problem" :currentUser="currentUser"/>
             </div>
         </div>
