@@ -2,9 +2,6 @@
 
 Cryptocurrency marketplace for student problems/exercises.
 
-## Deployment
-Current user unfriendly alpha version is [deployed here](https://studentchain-ui.herokuapp.com/).
-
 ## Back-end DML service
 Current back-end can be [found here](https://github.com/jjurinci/studentchain_backend).
 
